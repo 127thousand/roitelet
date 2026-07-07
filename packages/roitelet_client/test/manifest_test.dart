@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:roitelet_client/src/manifest.dart';
+import 'package:roitelet_client/roitelet.dart';
 
 void main() {
   test('PatchManifest parses a full manifest', () {
