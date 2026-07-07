@@ -1,0 +1,17 @@
+name: roitelet_client
+description: Self-hosted Flutter code-push client. Wraps flutter_eval with signing, versioning, and rollback.
+version: 0.1.0
+environment:
+  sdk: ^3.5.0
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_eval: ^0.8.2
+  http: ^1.1.0
+  path_provider: ^2.1.0
+  crypto: ^3.0.0
+  ed25519_edwards: ^0.3.1
+  pub_semver: ^2.1.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
