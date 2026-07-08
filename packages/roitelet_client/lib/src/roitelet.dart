@@ -41,7 +41,7 @@ class Roitelet {
     return Roitelet._(config, storage, updater);
   }
 
-  Future<void> checkForUpdates() => updater.checkAndDownload();
+  Future<UpdateResult> checkForUpdates() => updater.checkAndDownload();
 
   int? get currentPatchNumber => storage.currentPatchNumber;
   int? get pendingPatchNumber => storage.pendingPatchNumber;

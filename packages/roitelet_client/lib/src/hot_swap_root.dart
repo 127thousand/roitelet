@@ -30,6 +30,12 @@ class _RoiteletRootState extends State<RoiteletRoot> {
 
   Future<void> _boot() async {
     final r = await Roitelet.init(widget.config);
+    // If a patch was downloaded on a prior launch, promote it now so this
+    // launch uses it.
+    if (r.pendingPatchNumber != null) {
+      r.promotePending();
+    }
+    // Then check for a newer patch (downloads in background, applies next launch).
     await r.checkForUpdates();
     if (!mounted) return;
     setState(() => roitelet = r);
@@ -45,7 +51,15 @@ class _RoiteletRootState extends State<RoiteletRoot> {
     final evcFile = File('${roitelet!.storage.root.path}/patches/$patchN.evc');
     if (!evcFile.existsSync()) return widget.child;
     return HotSwapLoader(
+      key: ValueKey('roitelet_patch_$patchN'),
       uri: evcFile.uri.toString(),
+      strategy: HotSwapStrategy.immediate,
+      onError: (e, st) {
+        debugPrint('RoiteletRoot HotSwapLoader error: $e');
+        return Material(
+          child: Center(child: Text('patch load error: $e')),
+        );
+      },
       child: widget.child,
     );
   }

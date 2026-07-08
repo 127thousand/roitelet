@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_eval/flutter_eval.dart';
 import 'package:roitelet_client/roitelet.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
         appId: 'sandbox-app',
         releaseVersion: '1.0.0',
         manifestUrl:
-            'http://localhost:8787/v1/manifest/sandbox-app/1.0.0',
+            'http://192.168.8.130:8787/v1/manifest/sandbox-app/1.0.0',
         pubkeyBase64: const String.fromEnvironment(
           'ROITELET_PUBKEY',
           defaultValue: 'ARNSHnxj8a3oCOQhDyP+eZCPlJt7wcnGbyPbMwnAsqM=',
