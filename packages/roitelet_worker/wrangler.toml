@@ -8,4 +8,4 @@ bucket_name = "roitelet-patches"
 
 [[kv_namespaces]]
 binding = "ROITELET_META"
-id = "REPLACE_WITH_KV_ID"
+id = "a45b1f7fd2254032a03ee439a9768c83"
