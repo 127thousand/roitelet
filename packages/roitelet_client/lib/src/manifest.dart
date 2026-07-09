@@ -1,9 +1,10 @@
 class PatchManifest {
   final int patchNumber;
   final String evcUrl;
-  final String signature;     // base64 ed25519 signature of the .evc bytes
-  final String hash;          // hex sha256 of the .evc bytes
+  final String signature;
+  final String hash;
   final DateTime createdAt;
+  final String? minStoreVersion;
 
   PatchManifest({
     required this.patchNumber,
@@ -11,6 +12,7 @@ class PatchManifest {
     required this.signature,
     required this.hash,
     required this.createdAt,
+    this.minStoreVersion,
   });
 
   factory PatchManifest.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class PatchManifest {
       signature: sig,
       hash: hash,
       createdAt: DateTime.parse(created),
+      minStoreVersion: json['min_store_version'] as String?,
     );
   }
 
@@ -37,5 +40,6 @@ class PatchManifest {
         'signature': signature,
         'hash': hash,
         'created_at': createdAt.toIso8601String(),
+        if (minStoreVersion != null) 'min_store_version': minStoreVersion!,
       };
 }

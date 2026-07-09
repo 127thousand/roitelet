@@ -106,6 +106,7 @@ export default {
         const signature = form.get('signature') as string;
         const hashField = form.get('hash') as string;
         const file = form.get('file') as unknown as File;
+        const minStoreVersion = (form.get('min_store_version') as string) || null;
         if (!relVer || !patchNumber || !signature || !hashField || !file) {
           return new Response('missing fields', { status: 400 });
         }
@@ -115,13 +116,14 @@ export default {
           bytes,
           { httpMetadata: { contentType: 'application/octet-stream' } },
         );
-        const manifest = {
+        const manifest: Record<string, any> = {
           patch_number: patchNumber,
           evc_url: `${env.PUBLIC_BASE}/v1/${appId}/evc/${relVer}/${patchNumber}.evc`,
           signature,
           hash: hashField,
           created_at: new Date().toISOString(),
         };
+        if (minStoreVersion) manifest.min_store_version = minStoreVersion;
         await env.ROITELET_BUCKET.put(manifestKey(appId, relVer), JSON.stringify(manifest), {
           httpMetadata: { contentType: 'application/json' },
         });

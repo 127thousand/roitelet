@@ -21,4 +21,27 @@ void main() {
     expect(() => PatchManifest.fromJson({'evc_url': 'x'}),
         throwsA(isA<FormatException>()));
   });
+
+  test('PatchManifest parses min_store_version when present', () {
+    final m = PatchManifest.fromJson({
+      'patch_number': 1,
+      'evc_url': 'x',
+      'signature': 'x',
+      'hash': 'x',
+      'created_at': '2026-07-07T12:00:00Z',
+      'min_store_version': '2.0.0',
+    });
+    expect(m.minStoreVersion, '2.0.0');
+  });
+
+  test('PatchManifest min_store_version is null when absent', () {
+    final m = PatchManifest.fromJson({
+      'patch_number': 1,
+      'evc_url': 'x',
+      'signature': 'x',
+      'hash': 'x',
+      'created_at': '2026-07-07T12:00:00Z',
+    });
+    expect(m.minStoreVersion, isNull);
+  });
 }

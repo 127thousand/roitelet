@@ -16,6 +16,7 @@ Future<PatchUploadResult> uploadPatch({
   required String privkeyBase64,
   required int patchNumber,
   required String adminKey,
+  String? minStoreVersion,
 }) async {
   final bytes = await evcFile.readAsBytes();
   final sig = signPatch(bytes, privkeyBase64);
@@ -29,6 +30,9 @@ Future<PatchUploadResult> uploadPatch({
     ..fields['signature'] = sig.signatureBase64
     ..fields['hash'] = sig.hashHex
     ..files.add(http.MultipartFile.fromBytes('file', bytes, filename: 'patch.evc'));
+  if (minStoreVersion != null) {
+    req.fields['min_store_version'] = minStoreVersion;
+  }
   final r = await req.send();
   if (r.statusCode != 200) {
     throw Exception('upload failed: ${r.statusCode} ${await r.stream.toBytes()}');

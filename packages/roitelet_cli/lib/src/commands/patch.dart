@@ -24,6 +24,8 @@ class PatchCommand extends Command {
         help: 'Env var holding the worker admin key.');
     argParser.addOption('out', defaultsTo: 'patch.evc',
         help: 'Output filename inside hot-update-dir.');
+    argParser.addOption('min-store-version',
+        help: 'Minimum store version required. Apps below this show upgrade screen.');
   }
 
   @override
@@ -50,6 +52,7 @@ class PatchCommand extends Command {
       privkeyBase64: kp.privkeyBase64,
       patchNumber: patchNumber,
       adminKey: adminKey,
+      minStoreVersion: args['min-store-version'] as String?,
     );
     stdout.writeln('Uploaded. evc_url = ${res.evcUrl}');
   }
