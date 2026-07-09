@@ -1,10 +1,18 @@
-name = "roitelet"
+name = "patches"
 main = "src/index.ts"
 compatibility_date = "2024-06-01"
+workers_dev = true
+routes = [{ pattern = "patches.127k.co", custom_domain = true }]
 
 [[r2_buckets]]
 binding = "ROITELET_BUCKET"
 bucket_name = "roitelet-patches"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "roitelet"
+database_id = "2fbf44d6-8dca-4c21-9be8-4ee0e5e59f3c"
+migrations_dir = "migrations"
 
 [[kv_namespaces]]
 binding = "ROITELET_META"
