@@ -859,8 +859,15 @@ class HotSwap extends StatelessWidget {
     final scope =
         context.dependOnInheritedWidgetOfExactType<_HotSwapLoaderScope>();
 
-    if (scope != null) {
-      return runtimeOverride(id, args) as Widget? ?? childBuilder(context);
+    if (scope != null && scope._runtime != null) {
+      try {
+        final result = runtimeOverride(id, args);
+        if (result is Widget) return result;
+        debugPrint('HotSwap: override "$id" returned non-Widget: $result');
+      } catch (e, st) {
+        debugPrint('HotSwap: override "$id" failed, falling back: $e');
+        debugPrint('Stack: $st');
+      }
     }
     return childBuilder(context);
   }

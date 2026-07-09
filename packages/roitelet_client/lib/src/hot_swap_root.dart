@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_eval/flutter_eval.dart';
 import 'package:roitelet_client/src/roitelet.dart';
@@ -21,6 +22,7 @@ class RoiteletRoot extends StatefulWidget {
 
 class _RoiteletRootState extends State<RoiteletRoot> {
   Roitelet? roitelet;
+  String? _error;
 
   @override
   void initState() {
@@ -29,20 +31,26 @@ class _RoiteletRootState extends State<RoiteletRoot> {
   }
 
   Future<void> _boot() async {
-    final r = await Roitelet.init(widget.config);
-    // If a patch was downloaded on a prior launch, promote it now so this
-    // launch uses it.
-    if (r.pendingPatchNumber != null) {
-      r.promotePending();
+    try {
+      final r = await Roitelet.init(widget.config);
+      if (r.pendingPatchNumber != null) {
+        r.promotePending();
+      }
+      await r.checkForUpdates();
+      if (!mounted) return;
+      setState(() => roitelet = r);
+    } catch (e, st) {
+      debugPrint('RoiteletRoot boot error: $e\n$st');
+      if (mounted) setState(() => _error = e.toString());
     }
-    // Then check for a newer patch (downloads in background, applies next launch).
-    await r.checkForUpdates();
-    if (!mounted) return;
-    setState(() => roitelet = r);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_error != null) {
+      // Don't block the app — just render without patches and log the error
+      debugPrint('RoiteletRoot rendering without patches due to: $_error');
+    }
     if (roitelet == null) {
       return widget.loading ?? widget.child;
     }
@@ -54,12 +62,6 @@ class _RoiteletRootState extends State<RoiteletRoot> {
       key: ValueKey('roitelet_patch_$patchN'),
       uri: evcFile.uri.toString(),
       strategy: HotSwapStrategy.immediate,
-      onError: (e, st) {
-        debugPrint('RoiteletRoot HotSwapLoader error: $e');
-        return Material(
-          child: Center(child: Text('patch load error: $e')),
-        );
-      },
       child: widget.child,
     );
   }
