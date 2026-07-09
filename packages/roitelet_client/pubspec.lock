@@ -193,10 +193,9 @@ packages:
   flutter_eval:
     dependency: "direct main"
     description:
-      name: flutter_eval
-      sha256: "1aeba5ecc5bbafc560d6a48bb55b4c19051f596fc67944f4822054cf0005ef69"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../flutter_eval"
+      relative: true
+    source: path
     version: "0.8.2"
   flutter_test:
     dependency: "direct dev"
