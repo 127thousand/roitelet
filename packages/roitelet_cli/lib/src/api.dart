@@ -21,10 +21,9 @@ Future<PatchUploadResult> uploadPatch({
   final sig = signPatch(bytes, privkeyBase64);
   final req = http.MultipartRequest(
     'POST',
-    Uri.parse('${cfg.workerUrl}/v1/admin/patch'),
+    Uri.parse('${cfg.workerUrl}/admin/v1/${cfg.appId}/patch'),
   )
     ..headers['authorization'] = 'Bearer $adminKey'
-    ..fields['app_id'] = cfg.appId
     ..fields['release_version'] = cfg.releaseVersion
     ..fields['patch_number'] = patchNumber.toString()
     ..fields['signature'] = sig.signatureBase64
